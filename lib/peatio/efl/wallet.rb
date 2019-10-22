@@ -28,14 +28,11 @@ module Peatio
       end
 
       def create_transaction!(transaction, options = {})
-        txid = client.json_rpc(:sendtoaddress,
-                               [
-                                 transaction.to_address,
-                                 transaction.amount,
-                                 '',
-                                 '',
-                                 options[:subtract_fee].to_s == 'true' # subtract fee from transaction amount.
-                               ])
+        txid = client.json_rpc_for_withdrawal(:sendtoaddress,
+                                              transaction.to_address,
+                                              transaction.amount,
+        # options  # subtract fee from transaction amount.
+                                              )
         transaction.hash = txid
         transaction
       rescue Efl::Client::Error => e
